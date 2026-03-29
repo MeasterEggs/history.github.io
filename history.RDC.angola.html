@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Colonisation & Mémoire — RDC & Angola</title>
+  <title>Colonisation & Mémoire — 7 pays africains</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -13,20 +13,58 @@
       --ochre: #c8932a;
       --ochre-light: #e5b050;
       --ochre-dim: #7a5a1a;
-      --rust: #b34a2a;
       --cream: #f0e8d8;
       --cream-dim: #9c9080;
       --green: #2d6b4a;
-      --green-light: #4a9a6e;
       --text: #e8dece;
       --text-dim: #8a7e6e;
-      --rdc: #c8932a;
-      --angola: #4a9a6e;
       --border: rgba(200,147,42,0.2);
+      --tabs-bg: rgba(15,12,8,0.96);
+      --pullquote-bg: #181410;
+      --sources-bg: #181410;
+      --datacard-bg: #181410;
+      --stat-bg: #221e18;
+
+      /* Per-country accent colors */
+      --rdc:      #c8932a;
+      --angola:   #4a9a6e;
+      --djibouti: #4a90c4;
+      --guinee:   #c84a4a;
+      --liberia:  #4ab8a0;
+      --benin:    #a07cd0;
+      --erythree: #d0884a;
+    }
+
+    /* ─── LIGHT THEME ─── */
+    :root.light {
+      --bg: #f5f0e8;
+      --bg2: #ede6d8;
+      --bg3: #e0d8c8;
+      --ochre: #9a6e18;
+      --ochre-light: #7a5210;
+      --ochre-dim: #b8922a;
+      --cream: #1a1410;
+      --cream-dim: #5a5048;
+      --text: #2a2218;
+      --text-dim: #6a5e50;
+      --border: rgba(120,90,30,0.2);
+      --tabs-bg: rgba(245,240,232,0.97);
+      --pullquote-bg: #ede6d8;
+      --sources-bg: #ede6d8;
+      --datacard-bg: #ede6d8;
+      --stat-bg: #e0d8c8;
+
+      /* Slightly deeper accents for light bg */
+      --rdc:      #9a6e18;
+      --angola:   #2d7a52;
+      --djibouti: #2a6ea0;
+      --guinee:   #b03030;
+      --liberia:  #259880;
+      --benin:    #7050b8;
+      --erythree: #b06030;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -37,9 +75,9 @@
       line-height: 1.75;
       min-height: 100vh;
       overflow-x: hidden;
+      transition: background 0.35s ease, color 0.35s ease;
     }
 
-    /* ─── NOISE TEXTURE ─── */
     body::before {
       content: '';
       position: fixed; inset: 0;
@@ -53,17 +91,16 @@
       padding: 80px 6vw 60px;
       border-bottom: 1px solid var(--border);
       overflow: hidden;
+      transition: border-color 0.35s;
     }
-
     header::after {
       content: '';
       position: absolute;
       top: -60px; right: -80px;
       width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(200,147,42,0.08) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(200,147,42,0.06) 0%, transparent 70%);
       pointer-events: none;
     }
-
     .header-kicker {
       font-family: 'Space Mono', monospace;
       font-size: 11px;
@@ -72,98 +109,145 @@
       color: var(--ochre);
       margin-bottom: 20px;
     }
-
     h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2.4rem, 6vw, 5rem);
+      font-size: clamp(2.2rem, 5.5vw, 4.8rem);
       font-weight: 900;
       line-height: 1.05;
       color: var(--cream);
-      max-width: 820px;
+      max-width: 860px;
     }
-
-    h1 em {
-      font-style: italic;
-      color: var(--ochre-light);
-    }
-
+    h1 em { font-style: italic; color: var(--ochre-light); }
     .header-sub {
       margin-top: 24px;
       font-size: 1.05rem;
       color: var(--cream-dim);
-      max-width: 560px;
+      max-width: 620px;
       font-style: italic;
     }
-
-    .header-meta {
-      margin-top: 32px;
+    .header-flags {
+      margin-top: 28px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .flag-chip {
       font-family: 'Space Mono', monospace;
       font-size: 10px;
-      color: var(--text-dim);
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
+      padding: 6px 14px;
+      background: var(--stat-bg);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      transition: background 0.35s, border-color 0.35s, color 0.35s;
     }
 
-    /* ─── TABS ─── */
+    /* ─── TABS BAR ─── */
     .tabs-bar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      position: sticky; top: 0; z-index: 100;
       display: flex;
-      background: rgba(15,12,8,0.95);
+      align-items: center;
+      background: var(--tabs-bg);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       padding: 0 6vw;
+      overflow-x: auto;
+      transition: background 0.35s ease, border-color 0.35s ease;
     }
+    .tabs-bar::-webkit-scrollbar { height: 3px; }
+    .tabs-bar::-webkit-scrollbar-thumb { background: var(--ochre-dim); }
+
+    /* ─── THEME TOGGLE ─── */
+    .theme-toggle {
+      all: unset;
+      cursor: pointer;
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      background: var(--stat-bg);
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      transition: background 0.25s, color 0.25s, border-color 0.25s, box-shadow 0.25s;
+      white-space: nowrap;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+    .theme-toggle:hover { color: var(--cream); box-shadow: 0 4px 20px rgba(0,0,0,0.35); }
+    .theme-toggle .toggle-icon { font-size: 14px; line-height: 1; }
+    .theme-toggle .toggle-track {
+      width: 28px; height: 15px;
+      border-radius: 10px;
+      background: var(--ochre-dim);
+      position: relative;
+      transition: background 0.3s;
+      flex-shrink: 0;
+    }
+    .theme-toggle .toggle-thumb {
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      background: #f0e8d8;
+      transition: transform 0.3s ease;
+    }
+    :root.light .theme-toggle .toggle-track { background: var(--ochre); }
+    :root.light .theme-toggle .toggle-thumb { transform: translateX(13px); }
 
     .tab-btn {
       all: unset;
       cursor: pointer;
-      padding: 22px 32px 18px;
+      padding: 20px 22px 16px;
       font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.18em;
+      font-size: 10px;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--text-dim);
       border-bottom: 3px solid transparent;
       transition: color 0.25s, border-color 0.25s;
-      position: relative;
+      white-space: nowrap;
     }
-
-    .tab-btn .flag { margin-right: 10px; font-size: 15px; }
-
-    .tab-btn[data-tab="rdc"].active {
-      color: var(--rdc);
-      border-bottom-color: var(--rdc);
-    }
-    .tab-btn[data-tab="angola"].active {
-      color: var(--angola);
-      border-bottom-color: var(--angola);
-    }
+    .tab-btn .flag { margin-right: 7px; font-size: 13px; }
     .tab-btn:hover { color: var(--cream); }
 
-    /* ─── CONTENT PANELS ─── */
+    .tab-btn[data-tab="rdc"].active      { color: var(--rdc);      border-bottom-color: var(--rdc); }
+    .tab-btn[data-tab="angola"].active   { color: var(--angola);   border-bottom-color: var(--angola); }
+    .tab-btn[data-tab="djibouti"].active { color: var(--djibouti); border-bottom-color: var(--djibouti); }
+    .tab-btn[data-tab="guinee"].active   { color: var(--guinee);   border-bottom-color: var(--guinee); }
+    .tab-btn[data-tab="liberia"].active  { color: var(--liberia);  border-bottom-color: var(--liberia); }
+    .tab-btn[data-tab="benin"].active    { color: var(--benin);    border-bottom-color: var(--benin); }
+    .tab-btn[data-tab="erythree"].active { color: var(--erythree); border-bottom-color: var(--erythree); }
+
+    /* ─── PANELS ─── */
     .tab-panel { display: none; padding: 0 6vw 100px; }
     .tab-panel.active { display: block; }
 
     /* ─── COUNTRY HERO ─── */
     .country-hero {
-      padding: 72px 0 56px;
+      padding: 64px 0 48px;
       border-bottom: 1px solid var(--border);
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 32px;
       align-items: end;
     }
+    @media(max-width:680px){ .country-hero { grid-template-columns: 1fr; } }
 
     .country-name {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(1.8rem, 4.5vw, 3.6rem);
+      font-size: clamp(1.8rem, 4.5vw, 3.4rem);
       font-weight: 700;
       color: var(--cream);
       line-height: 1.1;
     }
-
     .country-name span {
       display: block;
       font-size: 0.42em;
@@ -172,53 +256,41 @@
       color: var(--text-dim);
       margin-bottom: 6px;
     }
-
     .country-badge {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
       gap: 6px;
     }
-
     .stat-pill {
       font-family: 'Space Mono', monospace;
-      font-size: 10px;
+      font-size: 9.5px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       padding: 6px 14px;
-      border-radius: 2px;
-      background: var(--bg3);
+      background: var(--stat-bg);
       color: var(--text-dim);
       border: 1px solid var(--border);
     }
 
     /* ─── SECTION ─── */
     .section {
-      padding: 64px 0;
+      padding: 60px 0;
       border-bottom: 1px solid rgba(200,147,42,0.1);
       display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 60px;
+      grid-template-columns: 210px 1fr;
+      gap: 56px;
     }
-
-    @media (max-width: 760px) {
-      .section { grid-template-columns: 1fr; gap: 24px; }
-      .country-hero { grid-template-columns: 1fr; }
-    }
-
-    .section-label {
-      position: relative;
-    }
+    @media(max-width:760px){ .section { grid-template-columns: 1fr; gap: 24px; } }
 
     .section-number {
       font-family: 'Playfair Display', serif;
-      font-size: 5rem;
+      font-size: 4.6rem;
       font-weight: 900;
       color: var(--bg3);
       line-height: 1;
       user-select: none;
     }
-
     .section-title {
       font-family: 'Space Mono', monospace;
       font-size: 10px;
@@ -227,109 +299,158 @@
       margin-top: 8px;
     }
 
-    .rdc .section-title { color: var(--rdc); }
-    .angola .section-title { color: var(--angola); }
-
-    .section-body {}
+    .rdc      .section-title { color: var(--rdc); }
+    .angola   .section-title { color: var(--angola); }
+    .djibouti .section-title { color: var(--djibouti); }
+    .guinee   .section-title { color: var(--guinee); }
+    .liberia  .section-title { color: var(--liberia); }
+    .benin    .section-title { color: var(--benin); }
+    .erythree .section-title { color: var(--erythree); }
 
     .section-body h2 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.9rem;
+      font-size: 1.85rem;
       font-weight: 700;
       color: var(--cream);
       line-height: 1.2;
-      margin-bottom: 28px;
+      margin-bottom: 26px;
     }
-
     .section-body h2 em { font-style: italic; color: var(--ochre-light); }
-
-    .section-body p {
-      margin-bottom: 20px;
-      color: var(--text);
-      font-size: 1.05rem;
-    }
-
+    .section-body p { margin-bottom: 18px; font-size: 1.02rem; color: var(--text); }
     .section-body p:last-child { margin-bottom: 0; }
 
     /* ─── TIMELINE ─── */
-    .timeline {
-      margin: 32px 0;
-      padding-left: 0;
-      list-style: none;
-    }
-
+    .timeline { margin: 28px 0; list-style: none; padding: 0; }
     .timeline li {
       display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 20px;
-      padding: 16px 0;
+      grid-template-columns: 90px 1fr;
+      gap: 18px;
+      padding: 14px 0;
       border-top: 1px solid rgba(200,147,42,0.1);
       align-items: baseline;
     }
-
     .tl-year {
       font-family: 'Space Mono', monospace;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       letter-spacing: 0.05em;
     }
-
-    .rdc .tl-year { color: var(--rdc); }
-    .angola .tl-year { color: var(--angola); }
-
+    .rdc      .tl-year { color: var(--rdc); }
+    .angola   .tl-year { color: var(--angola); }
+    .djibouti .tl-year { color: var(--djibouti); }
+    .guinee   .tl-year { color: var(--guinee); }
+    .liberia  .tl-year { color: var(--liberia); }
+    .benin    .tl-year { color: var(--benin); }
+    .erythree .tl-year { color: var(--erythree); }
     .tl-event { font-size: 0.95rem; color: var(--text); }
 
     /* ─── PULLQUOTE ─── */
     .pullquote {
-      margin: 36px 0;
-      padding: 28px 32px;
+      margin: 32px 0;
+      padding: 26px 30px;
       border-left: 4px solid;
-      background: var(--bg2);
+      background: var(--pullquote-bg);
+      transition: background 0.35s, border-color 0.35s;
       font-family: 'Playfair Display', serif;
       font-style: italic;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       line-height: 1.5;
       color: var(--cream);
     }
-
-    .rdc .pullquote { border-left-color: var(--rdc); }
-    .angola .pullquote { border-left-color: var(--angola); }
+    .rdc      .pullquote { border-left-color: var(--rdc); }
+    .angola   .pullquote { border-left-color: var(--angola); }
+    .djibouti .pullquote { border-left-color: var(--djibouti); }
+    .guinee   .pullquote { border-left-color: var(--guinee); }
+    .liberia  .pullquote { border-left-color: var(--liberia); }
+    .benin    .pullquote { border-left-color: var(--benin); }
+    .erythree .pullquote { border-left-color: var(--erythree); }
 
     .pullquote cite {
       display: block;
-      margin-top: 12px;
+      margin-top: 10px;
       font-family: 'Space Mono', monospace;
       font-style: normal;
-      font-size: 10px;
+      font-size: 9.5px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-dim);
     }
 
-    /* ─── SOURCES ─── */
-    .sources-block {
-      margin-top: 36px;
-      padding: 24px 28px;
-      background: var(--bg2);
+    /* ─── DATA GRID ─── */
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin: 28px 0;
+    }
+    .data-card {
+      background: var(--datacard-bg);
       border: 1px solid var(--border);
+      padding: 18px 20px;
+      transition: background 0.35s, border-color 0.35s;
+    }
+    .data-card .val {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.85rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .rdc      .data-card .val { color: var(--rdc); }
+    .angola   .data-card .val { color: var(--angola); }
+    .djibouti .data-card .val { color: var(--djibouti); }
+    .guinee   .data-card .val { color: var(--guinee); }
+    .liberia  .data-card .val { color: var(--liberia); }
+    .benin    .data-card .val { color: var(--benin); }
+    .erythree .data-card .val { color: var(--erythree); }
+
+    .data-card .lbl {
+      font-family: 'Space Mono', monospace;
+      font-size: 8.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 5px;
     }
 
+    /* ─── TAGS ─── */
+    .tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 8.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid;
+      border-radius: 2px;
+      margin: 3px 3px 3px 0;
+    }
+    .rdc      .tag { color: var(--rdc);      border-color: rgba(200,147,42,0.4); }
+    .angola   .tag { color: var(--angola);   border-color: rgba(74,154,110,0.4); }
+    .djibouti .tag { color: var(--djibouti); border-color: rgba(74,144,196,0.4); }
+    .guinee   .tag { color: var(--guinee);   border-color: rgba(200,74,74,0.4); }
+    .liberia  .tag { color: var(--liberia);  border-color: rgba(74,184,160,0.4); }
+    .benin    .tag { color: var(--benin);    border-color: rgba(160,124,208,0.4); }
+    .erythree .tag { color: var(--erythree); border-color: rgba(208,136,74,0.4); }
+
+    /* ─── SOURCES ─── */
+    .sources-block {
+      margin-top: 32px;
+      padding: 22px 26px;
+      background: var(--sources-bg);
+      border: 1px solid var(--border);
+      transition: background 0.35s, border-color 0.35s;
+    }
     .sources-block h3 {
       font-family: 'Space Mono', monospace;
-      font-size: 10px;
+      font-size: 9.5px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--ochre-dim);
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
-
-    .sources-block ul {
-      list-style: none;
-      padding: 0;
-    }
-
+    .sources-block ul { list-style: none; padding: 0; }
     .sources-block li {
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       color: var(--text-dim);
       padding: 6px 0;
       border-top: 1px solid rgba(200,147,42,0.07);
@@ -337,76 +458,7 @@
       gap: 10px;
       align-items: baseline;
     }
-
-    .sources-block li::before {
-      content: '↗';
-      font-size: 0.75rem;
-      flex-shrink: 0;
-    }
-
-    .sources-block a {
-      color: var(--text-dim);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .sources-block a:hover { color: var(--ochre-light); text-decoration: underline; }
-
-    /* ─── DATA CARD ─── */
-    .data-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-      margin: 32px 0;
-    }
-
-    .data-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      padding: 20px 22px;
-    }
-
-    .data-card .val {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      font-weight: 700;
-      line-height: 1;
-    }
-
-    .rdc .data-card .val { color: var(--rdc); }
-    .angola .data-card .val { color: var(--angola); }
-
-    .data-card .lbl {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-top: 6px;
-    }
-
-    /* ─── TAG ─── */
-    .tag {
-      display: inline-block;
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border: 1px solid;
-      border-radius: 2px;
-      margin: 4px 4px 4px 0;
-    }
-
-    .rdc .tag { color: var(--rdc); border-color: var(--ochre-dim); }
-    .angola .tag { color: var(--angola); border-color: var(--green); }
-
-    /* ─── DIVIDER LINE ─── */
-    .deco-line {
-      height: 1px;
-      background: linear-gradient(90deg, var(--ochre-dim), transparent);
-      margin: 48px 0;
-    }
+    .sources-block li::before { content: '↗'; font-size: 0.75rem; flex-shrink: 0; }
 
     /* ─── FOOTNOTE ─── */
     .footnote {
@@ -415,53 +467,67 @@
       color: var(--text-dim);
       padding: 12px 16px;
       border-left: 2px solid var(--bg3);
-      margin: 16px 0;
+      margin: 14px 0;
     }
 
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 640px) {
-      .tab-btn { padding: 18px 14px 14px; font-size: 9px; }
-      header { padding: 50px 5vw 40px; }
-      .tab-panel { padding: 0 5vw 80px; }
+    .deco-line {
+      height: 1px;
+      background: linear-gradient(90deg, var(--ochre-dim), transparent);
+      margin: 44px 0;
     }
 
     /* ─── ANIMATIONS ─── */
-    .tab-panel.active .section {
-      animation: fadeUp 0.5s ease both;
-    }
+    .tab-panel.active .section { animation: fadeUp 0.45s ease both; }
     .tab-panel.active .section:nth-child(2) { animation-delay: 0.05s; }
-    .tab-panel.active .section:nth-child(3) { animation-delay: 0.1s; }
+    .tab-panel.active .section:nth-child(3) { animation-delay: 0.10s; }
     .tab-panel.active .section:nth-child(4) { animation-delay: 0.15s; }
-
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media(max-width:600px){
+      .tab-btn { padding: 16px 10px 12px; font-size: 8.5px; }
+      header { padding: 48px 5vw 36px; }
+      .tab-panel { padding: 0 5vw 80px; }
     }
   </style>
 </head>
 <body>
 
+<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Basculer le thème">
+  <span class="toggle-icon" id="themeIcon">☀️</span>
+  <div class="toggle-track"><div class="toggle-thumb"></div></div>
+</button>
+
 <header>
-  <p class="header-kicker">Mémoire coloniale · Afrique subsaharienne</p>
-  <h1>Entre <em>extraction</em><br>et indépendance</h1>
-  <p class="header-sub">Une lecture historique de la colonisation et de ses héritages durables en République Démocratique du Congo et en Angola.</p>
-  <p class="header-meta">Sources académiques · Presse internationale · Données World Bank &amp; ONU</p>
+  <p class="header-kicker">Mémoire coloniale · Afrique</p>
+  <h1>Sept nations,<br><em>sept héritages</em></h1>
+  <p class="header-sub">Histoire coloniale, trajectoires post-indépendance et poids durable de la colonisation dans l'état actuel de sept pays africains.</p>
+  <div class="header-flags">
+    <span class="flag-chip">🇨🇩 RD Congo</span>
+    <span class="flag-chip">🇦🇴 Angola</span>
+    <span class="flag-chip">🇩🇯 Djibouti</span>
+    <span class="flag-chip">🇬🇳 Guinée</span>
+    <span class="flag-chip">🇱🇷 Libéria</span>
+    <span class="flag-chip">🇧🇯 Bénin</span>
+    <span class="flag-chip">🇪🇷 Érythrée</span>
+  </div>
 </header>
 
 <nav class="tabs-bar" role="tablist">
-  <button class="tab-btn active" data-tab="rdc" role="tab" aria-selected="true" onclick="switchTab('rdc')">
-    <span class="flag">🇨🇩</span>RD Congo
-  </button>
-  <button class="tab-btn" data-tab="angola" role="tab" aria-selected="false" onclick="switchTab('angola')">
-    <span class="flag">🇦🇴</span>Angola
-  </button>
+  <button class="tab-btn active" data-tab="rdc"      onclick="switchTab('rdc')"><span class="flag">🇨🇩</span>RD Congo</button>
+  <button class="tab-btn" data-tab="angola"          onclick="switchTab('angola')"><span class="flag">🇦🇴</span>Angola</button>
+  <button class="tab-btn" data-tab="djibouti"        onclick="switchTab('djibouti')"><span class="flag">🇩🇯</span>Djibouti</button>
+  <button class="tab-btn" data-tab="guinee"          onclick="switchTab('guinee')"><span class="flag">🇬🇳</span>Guinée</button>
+  <button class="tab-btn" data-tab="liberia"         onclick="switchTab('liberia')"><span class="flag">🇱🇷</span>Libéria</button>
+  <button class="tab-btn" data-tab="benin"           onclick="switchTab('benin')"><span class="flag">🇧🇯</span>Bénin</button>
+  <button class="tab-btn" data-tab="erythree"        onclick="switchTab('erythree')"><span class="flag">🇪🇷</span>Érythrée</button>
 </nav>
 
-<!-- ══════════════════════════════════════
-     RD CONGO
-══════════════════════════════════════ -->
-<div id="tab-rdc" class="tab-panel rdc active">
 
+<!-- ═══════════════════════════════ RD CONGO ═══════════════════════════════ -->
+<div id="tab-rdc" class="tab-panel rdc active">
   <div class="country-hero">
     <div>
       <h2 class="country-name">
@@ -476,7 +542,6 @@
     </div>
   </div>
 
-  <!-- SECTION 1 : Colonisation -->
   <div class="section">
     <div class="section-label">
       <div class="section-number">01</div>
@@ -484,39 +549,32 @@
     </div>
     <div class="section-body">
       <h2>L'État Indépendant du Congo :<br><em>une colonie privée</em></h2>
-
       <p>En 1885, la Conférence de Berlin reconnaît le roi des Belges <strong>Léopold II</strong> comme souverain personnel du bassin du Congo. Sous couvert de mission humanitaire et de lutte contre la traite arabe, il crée l'<em>État Indépendant du Congo</em> (ÉIC), une entité qui lui appartient à titre privé — sans aucune supervision internationale réelle.</p>
-
       <div class="pullquote">
         « Le Congo n'était pas une colonie belge. C'était la propriété personnelle d'un homme. »
         <cite>— Adam Hochschild, <em>Les Fantômes du roi Léopold</em>, 1998</cite>
       </div>
-
       <ul class="timeline">
         <li><span class="tl-year">1885</span><span class="tl-event">Léopold II obtient la reconnaissance internationale de son "État Indépendant du Congo" lors de la Conférence de Berlin.</span></li>
         <li><span class="tl-year">1890</span><span class="tl-event">Début du système des concessions caoutchoutières. Chaque village doit livrer une quantité fixe de latex sous peine de mutilations ou d'exécutions.</span></li>
-        <li><span class="tl-year">1904</span><span class="tl-event">Le rapport Casement (consul britannique Roger Casement) documente les atrocités systématiques : mains coupées, villages brûlés, famines provoquées.</span></li>
-        <li><span class="tl-year">1908</span><span class="tl-event">Sous pression internationale et après scandale mondial, la Belgique reprend la colonie à Léopold II : naissance du <em>Congo belge</em>.</span></li>
-        <li><span class="tl-year">1908–1960</span><span class="tl-event">Le Congo belge est exploité pour ses ressources (cuivre, uranium, caoutchouc, coton). La ségrégation raciale est institutionnalisée, l'éducation des Congolais volontairement limitée.</span></li>
-        <li><span class="tl-year">1960</span><span class="tl-event">Indépendance le 30 juin. Patrice Lumumba devient le premier Premier ministre. La Belgique n'a formé aucun cadre administratif local : il n'y a que 17 diplômés universitaires congolais dans tout le pays.</span></li>
+        <li><span class="tl-year">1904</span><span class="tl-event">Le rapport Casement documente les atrocités systématiques : mains coupées, villages brûlés, famines provoquées.</span></li>
+        <li><span class="tl-year">1908</span><span class="tl-event">Sous pression internationale, la Belgique reprend la colonie à Léopold II : naissance du <em>Congo belge</em>.</span></li>
+        <li><span class="tl-year">1908–1960</span><span class="tl-event">Exploitation des ressources (cuivre, uranium, caoutchouc). Ségrégation raciale institutionnalisée, éducation délibérément limitée.</span></li>
+        <li><span class="tl-year">1960</span><span class="tl-event">Indépendance le 30 juin. Patrice Lumumba premier Premier ministre. Seulement 17 diplômés universitaires congolais dans tout le pays.</span></li>
       </ul>
-
-      <p>Les estimations des historiens sur le nombre de morts durant la période léopoldienne varient entre <strong>5 et 10 millions de personnes</strong> sur une population estimée à 20 millions. Cette période constitue l'un des génocides économiques les moins commémorés du XXe siècle.</p>
-
+      <p>Les estimations historiques sur le nombre de morts durant la période léopoldienne varient entre <strong>5 et 10 millions de personnes</strong> sur une population estimée à 20 millions. Cette période constitue l'un des génocides économiques les moins commémorés du XXe siècle.</p>
       <div class="sources-block">
         <h3>Sources — Colonisation</h3>
         <ul>
-          <li>Adam Hochschild, <em>King Leopold's Ghost</em> (1998) — récit fondamental sur l'ÉIC</li>
-          <li>History.com — "King Leopold II and the Belgian Congo Atrocities"</li>
+          <li>Adam Hochschild, <em>King Leopold's Ghost</em>, 1998</li>
           <li>Rapport Casement (1904), Yale Avalon Project</li>
           <li>BBC History — Léopold II et le Congo</li>
-          <li>Crawford Young, "The African Colonial State and Its Political Legacy" — Journal of African History (JSTOR)</li>
+          <li>Crawford Young, "The African Colonial State and Its Political Legacy", Journal of African History</li>
         </ul>
       </div>
     </div>
   </div>
 
-  <!-- SECTION 2 : État post-colonial -->
   <div class="section">
     <div class="section-label">
       <div class="section-number">02</div>
@@ -524,49 +582,39 @@
     </div>
     <div class="section-body">
       <h2>De l'indépendance<br><em>au chaos institutionnel</em></h2>
-
-      <p>L'indépendance de 1960 est immédiatement suivie d'une crise politique majeure. <strong>Patrice Lumumba</strong>, figure nationaliste et panafricaine, est renversé avec la complicité de la CIA et de la Belgique, puis assassiné en janvier 1961. Son élimination scelle pour des décennies le destin du pays.</p>
-
       <div class="data-grid">
         <div class="data-card"><div class="val">~100M</div><div class="lbl">Habitants (2024)</div></div>
         <div class="data-card"><div class="val">600$</div><div class="lbl">PIB/hab. (World Bank 2023)</div></div>
         <div class="data-card"><div class="val">6,6M</div><div class="lbl">Déplacés internes (OCHA)</div></div>
         <div class="data-card"><div class="val">#176</div><div class="lbl">IDH mondial (PNUD 2023)</div></div>
       </div>
-
-      <p>De 1965 à 1997, <strong>Mobutu Sese Seko</strong> dirige le pays rebaptisé <em>Zaïre</em> sous une dictature kleptocratique. Il détourne des milliards de dollars en ressources nationales tout en bénéficiant du soutien occidental en raison de son anticommunisme affiché. La dette publique explose, les institutions se vident de leur substance.</p>
-
-      <p>La chute de Mobutu en 1997 ouvre une période de <strong>guerres civiles dévastatrices</strong>. La Première Guerre du Congo (1996–97) puis la Deuxième Guerre du Congo (1998–2003) — souvent qualifiée de "Première Guerre mondiale africaine" — impliquent neuf pays et font entre 3 et 5,4 millions de morts selon le <em>International Rescue Committee</em>.</p>
-
+      <p>L'indépendance de 1960 est immédiatement suivie d'une crise majeure. <strong>Patrice Lumumba</strong> est renversé avec la complicité de la CIA et de la Belgique, puis assassiné en janvier 1961. De 1965 à 1997, <strong>Mobutu Sese Seko</strong> dirige le Zaïre sous une dictature kleptocratique, détournant des milliards tout en bénéficiant du soutien occidental.</p>
       <ul class="timeline">
         <li><span class="tl-year">1961</span><span class="tl-event">Assassinat de Patrice Lumumba avec la complicité de la CIA et des services belges.</span></li>
         <li><span class="tl-year">1965</span><span class="tl-event">Coup d'état de Mobutu. Début de 32 ans de dictature.</span></li>
-        <li><span class="tl-year">1971</span><span class="tl-event">Le pays est rebaptisé "Zaïre" dans le cadre de la politique de "zaïrianisation" nationaliste.</span></li>
-        <li><span class="tl-year">1996–2003</span><span class="tl-event">Deux guerres civiles régionales. Des millions de morts. Effondrements des services publics.</span></li>
-        <li><span class="tl-year">2006</span><span class="tl-event">Premières élections démocratiques. Joseph Kabila élu. Mais la violence persiste à l'Est.</span></li>
-        <li><span class="tl-year">2019–auj.</span><span class="tl-event">Félix Tshisekedi président. L'Est du pays reste en proie à des conflits armés (M23, groupes locaux) alimentés par les minerais de conflits.</span></li>
+        <li><span class="tl-year">1971</span><span class="tl-event">Le pays est rebaptisé "Zaïre" dans le cadre de la politique de "zaïrianisation".</span></li>
+        <li><span class="tl-year">1996–2003</span><span class="tl-event">Deux guerres civiles régionales. Des millions de morts. Effondrement des services publics.</span></li>
+        <li><span class="tl-year">2006</span><span class="tl-event">Premières élections démocratiques. Joseph Kabila élu. La violence persiste à l'Est.</span></li>
+        <li><span class="tl-year">2019–auj.</span><span class="tl-event">Félix Tshisekedi président. L'Est reste en proie à des conflits armés alimentés par les minerais de conflits.</span></li>
       </ul>
-
       <div class="pullquote">
-        « La RDC possède un sous-sol parmi les plus riches du monde. Elle abrite 70% des réserves mondiales de cobalt, indispensable aux batteries électriques. Pourtant, ses habitants comptent parmi les plus pauvres. »
+        « La RDC possède 70% des réserves mondiales de cobalt, indispensable aux batteries électriques. Pourtant, ses habitants comptent parmi les plus pauvres. »
         <cite>— Rapport Global Witness, 2022</cite>
       </div>
-
       <div class="sources-block">
         <h3>Sources — État post-colonial</h3>
         <ul>
-          <li>Le Monde — "Assassinat de Lumumba : la Belgique reconnaît sa responsabilité morale" (2021)</li>
-          <li>International Rescue Committee — Rapport mortalité Congo (2007)</li>
+          <li>Le Monde — "Assassinat de Lumumba : la Belgique reconnaît sa responsabilité morale", 2021</li>
+          <li>International Rescue Committee — Rapport mortalité Congo, 2007</li>
           <li>World Bank Data — République Démocratique du Congo</li>
           <li>PNUD — Indice de Développement Humain, RDC</li>
           <li>Global Witness — Minerais de conflits en RDC</li>
-          <li>International Crisis Group — RDC (analyses en cours)</li>
+          <li>International Crisis Group — RDC</li>
         </ul>
       </div>
     </div>
   </div>
 
-  <!-- SECTION 3 : Rôle de la colonisation -->
   <div class="section">
     <div class="section-label">
       <div class="section-number">03</div>
@@ -574,36 +622,25 @@
     </div>
     <div class="section-body">
       <h2>Héritage colonial :<br><em>racines du sous-développement</em></h2>
-
-      <p>La connexion entre la violence coloniale et l'état actuel du Congo est documentée par de nombreux chercheurs. La colonisation belge a délibérément <strong>empêché l'émergence d'élites locales formées</strong>. À l'indépendance, le pays ne compte que 17 diplômés universitaires congolais et aucun officier, médecin ou ingénieur autochtone formé au niveau supérieur.</p>
-
+      <p>La colonisation belge a délibérément <strong>empêché l'émergence d'élites locales formées</strong>. À l'indépendance, le pays ne compte que 17 diplômés universitaires congolais et aucun officier, médecin ou ingénieur autochtone formé au niveau supérieur.</p>
       <div class="deco-line"></div>
-
-      <p><strong>L'économie d'extraction</strong> façonnée par Léopold II — caoutchouc, ivoire, puis uranium (la bombe d'Hiroshima a été enrichie avec de l'uranium congolais), cuivre, cobalt — n'a jamais été réorientée vers un développement endogène. Les infrastructures construites par les Belges (chemins de fer, routes) reliaient les centres de ressources aux ports d'exportation, non les populations entre elles.</p>
-
+      <p><strong>L'économie d'extraction</strong> façonnée par Léopold II — caoutchouc, ivoire, uranium (la bombe d'Hiroshima a été enrichie avec de l'uranium congolais), cuivre, cobalt — n'a jamais été réorientée vers un développement endogène. Les infrastructures reliaient les centres de ressources aux ports, non les populations entre elles.</p>
       <div class="tag">Économie extractive</div>
       <div class="tag">Vide institutionnel</div>
       <div class="tag">Ingérence étrangère</div>
       <div class="tag">Frontières artificielles</div>
-
-      <p style="margin-top:20px">Les frontières héritées de Berlin (1885) ont regroupé arbitrairement plus de <strong>450 groupes ethniques</strong> au sein d'un seul État, sans logique culturelle ou géographique cohérente. La manipulation des tensions ethniques par les administrateurs coloniaux belges — notamment via le système des cartes d'identité ethniques imposé au Rwanda voisin, et les politiques de favoritisme — a semé les graines des futurs conflits.</p>
-
-      <p>L'économiste <strong>Nathan Nunn</strong> (Harvard) a montré dans une étude empirique majeure que les régions d'Afrique ayant subi la plus forte traite négrière et la colonisation la plus violente présentent systématiquement les PIB par habitant les plus faibles aujourd'hui — un lien statistique robuste entre passé colonial et sous-développement actuel.</p>
-
+      <p style="margin-top:18px">Les frontières héritées de Berlin (1885) ont regroupé arbitrairement plus de <strong>450 groupes ethniques</strong> au sein d'un seul État. L'économiste <strong>Nathan Nunn</strong> (Harvard) a montré empiriquement que les régions d'Afrique ayant subi la colonisation la plus violente présentent systématiquement les PIB par habitant les plus faibles aujourd'hui.</p>
       <div class="pullquote">
-        « Sans comprendre comment le Congo a été systematiquement vidé de ses ressources humaines et matérielles pendant 75 ans, il est impossible de comprendre pourquoi il est aujourd'hui dans cette situation. »
+        « Sans comprendre comment le Congo a été systématiquement vidé de ses ressources humaines et matérielles pendant 75 ans, il est impossible de comprendre pourquoi il est aujourd'hui dans cette situation. »
         <cite>— Georges Nzongola-Ntalaja, <em>The Congo from Leopold to Kabila</em>, 2002</cite>
       </div>
-
       <div class="footnote">Note : La Belgique a présenté en 2020–2021 des excuses formelles pour son rôle dans l'assassinat de Lumumba et pour les crimes coloniaux, mais aucune réparation financière n'a été votée.</div>
-
       <div class="sources-block">
         <h3>Sources — Héritage colonial</h3>
         <ul>
-          <li>Nathan Nunn, "The Long-term Effects of Africa's Slave Trades" — Harvard / QJE (2008)</li>
-          <li>Georges Nzongola-Ntalaja, <em>The Congo from Leopold to Kabila</em>, Zed Books</li>
-          <li>Journal of Contemporary African Studies — "Colonial institutions and development in the DRC"</li>
-          <li>Foreign Affairs — "Congo's Failing State" (2021)</li>
+          <li>Nathan Nunn, "The Long-term Effects of Africa's Slave Trades", Harvard / QJE, 2008</li>
+          <li>Georges Nzongola-Ntalaja, <em>The Congo from Leopold to Kabila</em>, Zed Books, 2002</li>
+          <li>Foreign Affairs — "Congo's Failing State", 2021</li>
           <li>Amnesty International — RDC, rapports annuels</li>
         </ul>
       </div>
@@ -612,17 +649,11 @@
 </div>
 
 
-<!-- ══════════════════════════════════════
-     ANGOLA
-══════════════════════════════════════ -->
+<!-- ═══════════════════════════════ ANGOLA ═══════════════════════════════ -->
 <div id="tab-angola" class="tab-panel angola">
-
   <div class="country-hero">
     <div>
-      <h2 class="country-name">
-        <span>République d'</span>
-        Angola
-      </h2>
+      <h2 class="country-name"><span>République d'</span>Angola</h2>
     </div>
     <div class="country-badge">
       <div class="stat-pill">Indépendance : 11 nov. 1975</div>
@@ -631,7 +662,6 @@
     </div>
   </div>
 
-  <!-- SECTION 1 : Colonisation -->
   <div class="section">
     <div class="section-label">
       <div class="section-number">01</div>
@@ -639,40 +669,32 @@
     </div>
     <div class="section-body">
       <h2>Cinq siècles de<br><em>domination portugaise</em></h2>
-
-      <p>Le Portugal établit ses premiers contacts avec l'Angola dès <strong>1483</strong>, lorsque Diogo Cão atteint l'embouchure du Congo. Luanda est fondée en 1575 et devient rapidement le centre névralgique de la traite transatlantique des esclaves. Entre le XVIe et le XIXe siècle, l'Angola fournit à elle seule plus de <strong>4 millions d'esclaves</strong> aux Amériques — soit près d'un tiers de la traite atlantique totale.</p>
-
+      <p>Le Portugal établit ses premiers contacts avec l'Angola dès <strong>1483</strong>. Luanda est fondée en 1575 et devient rapidement le centre névralgique de la traite transatlantique. Entre le XVIe et le XIXe siècle, l'Angola fournit à elle seule plus de <strong>4 millions d'esclaves</strong> aux Amériques — soit près d'un tiers de la traite atlantique totale.</p>
       <div class="pullquote">
         « Luanda était la capitale de la traite. Presque chaque Afro-brésilien a une connexion génétique avec l'Angola. »
-        <cite>— José Curto, historien, York University, cité dans <em>The Guardian</em></cite>
+        <cite>— José Curto, historien, York University</cite>
       </div>
-
       <ul class="timeline">
         <li><span class="tl-year">1483</span><span class="tl-event">Premiers contacts portugais. Luanda fondée en 1575 comme principal port de traite.</span></li>
         <li><span class="tl-year">1575–1850</span><span class="tl-event">L'Angola est la plus grande source d'esclaves de la traite transatlantique, exportant vers le Brésil.</span></li>
-        <li><span class="tl-year">1884–1920</span><span class="tl-event">Colonisation de l'intérieur par les armes. Le Portugal soumet les royaumes intérieurs (Ovimbundu, Mbundu, Bakongo).</span></li>
-        <li><span class="tl-year">1926–1974</span><span class="tl-event">Sous la dictature de Salazar puis Caetano (Estado Novo), l'Angola est administrée comme "province d'outre-mer". Système de travail forcé (<em>contrato</em>).</span></li>
-        <li><span class="tl-year">1961</span><span class="tl-event">Début de la guerre de libération nationale. Le MPLA, le FNLA puis l'UNITA mènent une guérilla contre l'armée portugaise.</span></li>
-        <li><span class="tl-year">1974</span><span class="tl-event">La Révolution des Œillets au Portugal renverse la dictature. Négociations d'indépendance avec les trois mouvements.</span></li>
+        <li><span class="tl-year">1884–1920</span><span class="tl-event">Colonisation de l'intérieur par les armes. Soumission des royaumes Ovimbundu, Mbundu, Bakongo.</span></li>
+        <li><span class="tl-year">1926–1974</span><span class="tl-event">Sous Salazar (Estado Novo), l'Angola est "province d'outre-mer". Travail forcé (<em>contrato</em>).</span></li>
+        <li><span class="tl-year">1961</span><span class="tl-event">Début de la guerre de libération nationale. MPLA, FNLA et UNITA mènent la guérilla.</span></li>
+        <li><span class="tl-year">1974</span><span class="tl-event">La Révolution des Œillets renverse la dictature. Négociations d'indépendance.</span></li>
         <li><span class="tl-year">1975</span><span class="tl-event">Indépendance le 11 novembre. Immédiatement suivie d'une guerre civile entre MPLA, UNITA et FNLA.</span></li>
       </ul>
-
-      <p>La colonisation portugaise en Angola se distingue par son système d'<strong>assimilado</strong> : seuls les Angolais maîtrisant le portugais, ayant adopté les modes de vie européens et renoncé aux coutumes ancestrales pouvaient obtenir un statut juridique supérieur. En 1950, à peine <strong>0,7% de la population</strong> était classée assimilado. Les autres restaient <em>indígenas</em>, soumis au travail forcé (<em>contrato</em>) et à l'impôt de capitation.</p>
-
+      <p>La colonisation portugaise se distingue par son système d'<strong>assimilado</strong> : en 1950, à peine <strong>0,7% de la population</strong> bénéficiait d'un statut juridique supérieur. Les autres restaient <em>indígenas</em>, soumis au travail forcé et à l'impôt de capitation.</p>
       <div class="sources-block">
         <h3>Sources — Colonisation</h3>
         <ul>
           <li>David Birmingham, <em>A Short History of Modern Angola</em>, Oxford University Press</li>
           <li>Malyn Newitt, <em>Portugal in Africa</em>, Cambridge University Press</li>
-          <li>The Guardian — Angola's colonial past and the slave trade</li>
           <li>Slave Voyages Database — Données sur la traite depuis l'Angola</li>
-          <li>Human Rights Watch — Contexte historique Angola</li>
         </ul>
       </div>
     </div>
   </div>
 
-  <!-- SECTION 2 : État post-colonial -->
   <div class="section">
     <div class="section-label">
       <div class="section-number">02</div>
@@ -680,47 +702,37 @@
     </div>
     <div class="section-body">
       <h2>27 ans de guerre civile,<br><em>une paix fragile</em></h2>
-
-      <p>L'indépendance de l'Angola (novembre 1975) débouche immédiatement sur une guerre civile opposant le <strong>MPLA</strong> (marxiste, soutenu par Cuba et l'URSS), l'<strong>UNITA</strong> (soutenu par les États-Unis et l'Afrique du Sud), et le FNLA. Ce conflit proxy de Guerre froide dure <strong>27 ans</strong> et ne se termine qu'en 2002 avec la mort du chef de l'UNITA Jonas Savimbi.</p>
-
       <div class="data-grid">
         <div class="data-card"><div class="val">36M</div><div class="lbl">Habitants (2024)</div></div>
         <div class="data-card"><div class="val">3 500$</div><div class="lbl">PIB/hab. (World Bank 2023)</div></div>
         <div class="data-card"><div class="val">500k</div><div class="lbl">Morts guerre civile (estimés)</div></div>
         <div class="data-card"><div class="val">#148</div><div class="lbl">IDH mondial (PNUD 2023)</div></div>
       </div>
-
-      <p>Depuis 2002, le MPLA gouverne sans partage sous la présidence longue de <strong>José Eduardo dos Santos</strong> (1979–2017), puis de <strong>João Lourenço</strong> (depuis 2017). Le pays est une pétrocratie : le pétrole représente environ 90% des exportations et 70% des recettes fiscales, mais les bénéfices sont très inégalement distribués.</p>
-
+      <p>L'indépendance débouche immédiatement sur une guerre civile opposant le <strong>MPLA</strong> (soutenu par Cuba et l'URSS) à l'<strong>UNITA</strong> (soutenu par les États-Unis et l'Afrique du Sud). Ce conflit proxy de Guerre froide dure <strong>27 ans</strong> et se termine en 2002 avec la mort de Jonas Savimbi.</p>
       <ul class="timeline">
-        <li><span class="tl-year">1975–2002</span><span class="tl-event">Guerre civile. 500 000 morts estimés, 4 millions de déplacés, infrastructures détruites sur tout le territoire.</span></li>
+        <li><span class="tl-year">1975–2002</span><span class="tl-event">Guerre civile. 500 000 morts estimés, 4 millions de déplacés, infrastructures détruites.</span></li>
         <li><span class="tl-year">1979</span><span class="tl-event">José Eduardo dos Santos prend le pouvoir. Il le conservera 38 ans.</span></li>
-        <li><span class="tl-year">2002</span><span class="tl-event">Mort de Jonas Savimbi (UNITA). Signature des accords de paix. Fin officielle du conflit.</span></li>
-        <li><span class="tl-year">2002–2015</span><span class="tl-event">Boom pétrolier. Croissance économique forte (+12%/an), mais richesses concentrées dans les mains de l'élite MPLA.</span></li>
-        <li><span class="tl-year">2017</span><span class="tl-event">João Lourenço remplace dos Santos. Il annonce une lutte contre la corruption, fait juger Isabel dos Santos.</span></li>
-        <li><span class="tl-year">2023–auj.</span><span class="tl-event">L'Angola cherche à diversifier son économie post-pétrole. Mais la pauvreté reste massive : 52% de la population sous le seuil de pauvreté.</span></li>
+        <li><span class="tl-year">2002</span><span class="tl-event">Mort de Jonas Savimbi. Signature des accords de paix.</span></li>
+        <li><span class="tl-year">2002–2015</span><span class="tl-event">Boom pétrolier. Croissance forte, mais richesses concentrées dans l'élite MPLA.</span></li>
+        <li><span class="tl-year">2017</span><span class="tl-event">João Lourenço remplace dos Santos. Lutte annoncée contre la corruption.</span></li>
+        <li><span class="tl-year">2023–auj.</span><span class="tl-event">Diversification économique tentée. Mais 52% de la population reste sous le seuil de pauvreté.</span></li>
       </ul>
-
       <div class="pullquote">
-        « L'Angola est l'un des pays les plus inégalitaires du monde. Une Luanda de verre et de béton coexiste avec des musseques où des millions de personnes n'ont pas accès à l'eau courante. »
+        « L'Angola est l'un des pays les plus inégalitaires du monde. Une Luanda de verre et de béton coexiste avec des musseques sans eau courante. »
         <cite>— Ricardo Soares de Oliveira, <em>Magnificent and Beggar Land</em>, 2015</cite>
       </div>
-
       <div class="sources-block">
         <h3>Sources — État post-colonial</h3>
         <ul>
-          <li>Ricardo Soares de Oliveira, <em>Magnificent and Beggar Land</em> (2015), Hurst</li>
+          <li>Ricardo Soares de Oliveira, <em>Magnificent and Beggar Land</em>, Hurst, 2015</li>
           <li>World Bank Data — Angola</li>
           <li>PNUD — Indice de Développement Humain, Angola</li>
-          <li>BBC Afrique — L'Angola après la guerre civile</li>
-          <li>Amnesty International — Angola, rapports annuels</li>
           <li>Transparency International — Indice de corruption, Angola</li>
         </ul>
       </div>
     </div>
   </div>
 
-  <!-- SECTION 3 : Rôle de la colonisation -->
   <div class="section">
     <div class="section-label">
       <div class="section-number">03</div>
@@ -728,42 +740,580 @@
     </div>
     <div class="section-body">
       <h2>Cinq siècles de fractures :<br><em>héritages impossibles à ignorer</em></h2>
-
-      <p>Le cas angolais illustre comment une colonisation pluriséculaire peut structurer durablement les dynamiques économiques, politiques et sociales d'un pays. La traite esclavagiste a d'abord vidé les sociétés angolaises de leur force vive, perturbé les structures politiques locales et créé des économies de razzia incompatibles avec le développement.</p>
-
-      <p>La colonisation tardive et violente de l'intérieur (1884–1920) a ensuite détruit les royaumes pré-coloniaux organisés (Ndongo, Matamba, Ovimbundu) sans les remplacer par des institutions capables. Le système de l'<em>assimilado</em> a fracturé la société angolaise en créant une classe d'intermédiaires acculturés, dont le MPLA sera largement issu, et une masse de <em>indígenas</em> maintenus dans l'analphabétisme.</p>
-
+      <p>La traite esclavagiste a vidé les sociétés angolaises de leur force vive et créé des économies de razzia. La colonisation tardive (1884–1920) a détruit les royaumes pré-coloniaux sans les remplacer par des institutions capables. Le système <em>assimilado</em> a fracturé la société en créant une minorité d'acculturés (dont le MPLA sera issu) et une masse analphabète.</p>
       <div class="tag">Traite esclavagiste</div>
       <div class="tag">Travail forcé</div>
-      <div class="tag">Guerre de libération</div>
       <div class="tag">Proxy guerre froide</div>
       <div class="tag">Économie rentière</div>
-
-      <p style="margin-top:20px">Le départ précipité des Portugais en 1975 — <strong>300 000 colons rapatrient leurs capitaux et leur savoir-faire technique</strong> en quelques mois — laisse un pays sans cadres formés pour gérer les infrastructures ou l'économie. Les guerres civiles qui s'ensuivent sont directement nourries par les rivalités que la colonisation a créées ou exacerbées entre factions, et par les armes déversées par les puissances étrangères (URSS/Cuba vs. USA/Afrique du Sud) dans un pays affaibli.</p>
-
+      <p style="margin-top:18px">Le départ précipité des Portugais en 1975 — <strong>300 000 colons rapatriant capitaux et savoir-faire</strong> en quelques mois — laisse un pays sans cadres formés. La rente pétrolière reproduit ensuite la logique extractiviste coloniale, permettant à l'élite de se maintenir sans contrat social avec la population.</p>
       <div class="pullquote">
         « La guerre civile angolaise ne peut pas être comprise indépendamment de la colonisation portugaise. Elle en est la suite directe, amplifiée par la Guerre froide. »
         <cite>— Christine Messiant, <em>L'Angola post-colonial</em>, Karthala, 2008</cite>
       </div>
-
-      <p>Paradoxalement, la rente pétrolière — découverte dans les années 1950, exploitée à grande échelle depuis les années 1970 — reproduit la logique extractiviste coloniale. Elle permet à l'élite au pouvoir de se maintenir sans avoir besoin d'un vrai contrat social avec la population, perpétuant une <strong>dépendance néo-coloniale</strong> vis-à-vis des compagnies multinationales (TotalEnergies, Chevron, BP) qui contrôlent l'extraction.</p>
-
-      <div class="footnote">Note : Selon l'historienne Jill Dias et l'anthropologue Anne Pitcher, le Portugal n'a à ce jour jamais présenté d'excuses formelles pour ses crimes coloniaux en Angola, ni pour la traite esclavagiste.</div>
-
+      <div class="footnote">Note : Le Portugal n'a à ce jour jamais présenté d'excuses formelles pour ses crimes coloniaux en Angola, ni pour la traite esclavagiste.</div>
       <div class="sources-block">
         <h3>Sources — Héritage colonial</h3>
         <ul>
-          <li>Christine Messiant, <em>L'Angola post-colonial. Guerre et paix sans démocratisation</em>, Karthala, 2008</li>
-          <li>Nathan Nunn, "The Long-term Effects of Africa's Slave Trades", Harvard QJE (2008)</li>
-          <li>M. Anne Pitcher, "Recreating Colonialism or Reconstructing the State?" — Journal of Southern African Studies</li>
-          <li>Tony Hodges, "The Economic Foundations of the Patrimonial State in Angola" — African Affairs, JSTOR</li>
-          <li>New York Times — "The Fall of Africa's Richest Woman" — Isabel dos Santos et le pillage systémique</li>
+          <li>Christine Messiant, <em>L'Angola post-colonial</em>, Karthala, 2008</li>
+          <li>Nathan Nunn, "The Long-term Effects of Africa's Slave Trades", Harvard QJE, 2008</li>
           <li>Global Witness — Pétrole et gouvernance en Angola</li>
         </ul>
       </div>
     </div>
   </div>
 </div>
+
+
+<!-- ═══════════════════════════════ DJIBOUTI ═══════════════════════════════ -->
+<div id="tab-djibouti" class="tab-panel djibouti">
+  <div class="country-hero">
+    <div>
+      <h2 class="country-name"><span>République de</span>Djibouti</h2>
+    </div>
+    <div class="country-badge">
+      <div class="stat-pill">Indépendance : 27 juin 1977</div>
+      <div class="stat-pill">Colonisateur : France</div>
+      <div class="stat-pill">Superficie : 23 200 km²</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">
+      <div class="section-number">01</div>
+      <div class="section-title">Histoire de la colonisation</div>
+    </div>
+    <div class="section-body">
+      <h2>La Côte française<br><em>des Somalis</em></h2>
+      <p>La France s'installe dans la région à partir de <strong>1862</strong>, lorsqu'elle achète la baie d'Obock aux sultans afars. L'intérêt est stratégique : le détroit de Bab-el-Mandeb contrôle le passage entre la mer Rouge et le golfe d'Aden. En 1888, Djibouti-ville est fondée. La construction du chemin de fer Djibouti–Addis-Abeba (1897–1917) fait du port la principale porte d'entrée de l'Éthiopie enclavée.</p>
+      <div class="pullquote">
+        « Djibouti fut moins colonisé pour ses ressources que pour sa géographie. C'est une colonie de position, pas d'exploitation. »
+        <cite>— Robert Laffont, <em>La Corne de l'Afrique</em>, 1971</cite>
+      </div>
+      <ul class="timeline">
+        <li><span class="tl-year">1862</span><span class="tl-event">La France acquiert la baie d'Obock. Début de la présence coloniale.</span></li>
+        <li><span class="tl-year">1888</span><span class="tl-event">Fondation de Djibouti-ville. Territoire rebaptisé Côte française des Somalis.</span></li>
+        <li><span class="tl-year">1897–1917</span><span class="tl-event">Construction du chemin de fer Djibouti–Addis-Abeba, principal axe économique colonial.</span></li>
+        <li><span class="tl-year">1946</span><span class="tl-event">Territoire d'outre-mer français. Représentation à l'Assemblée nationale.</span></li>
+        <li><span class="tl-year">1967</span><span class="tl-event">Rebaptisé "Territoire français des Afars et des Issas". Montée des tensions entre les deux communautés.</span></li>
+        <li><span class="tl-year">1977</span><span class="tl-event">Indépendance le 27 juin. Hassan Gouled Aptidon premier président.</span></li>
+      </ul>
+      <p>La colonisation française s'appuie sur une politique de <strong>diviser pour régner</strong> entre Afars et Issas, neutralisant tout mouvement nationaliste unifié. Cette fracture communautaire sera l'une des principales tensions politiques post-indépendance.</p>
+      <div class="sources-block">
+        <h3>Sources — Colonisation</h3>
+        <ul>
+          <li>Virginia Thompson & Richard Adloff, <em>Djibouti and the Horn of Africa</em>, Stanford University Press, 1968</li>
+          <li>Encyclopædia Britannica — "Djibouti: History"</li>
+          <li>BBC News — "Djibouti country profile"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">
+      <div class="section-number">02</div>
+      <div class="section-title">État après la colonisation</div>
+    </div>
+    <div class="section-body">
+      <h2>Base militaire du monde :<br><em>une souveraineté sous tutelle</em></h2>
+      <div class="data-grid">
+        <div class="data-card"><div class="val">1,1M</div><div class="lbl">Habitants (2024)</div></div>
+        <div class="data-card"><div class="val">3 400$</div><div class="lbl">PIB/hab. (World Bank 2023)</div></div>
+        <div class="data-card"><div class="val">~80%</div><div class="lbl">Population urbaine</div></div>
+        <div class="data-card"><div class="val">#166</div><div class="lbl">IDH mondial (PNUD 2023)</div></div>
+      </div>
+      <p>Depuis l'indépendance, Djibouti est dirigé par un régime à parti dominant. <strong>Ismaïl Omar Guelleh</strong> gouverne depuis 1999. Le pays héberge des bases militaires <strong>française, américaine, japonaise, italienne et chinoise</strong> — concentration unique au monde. Les loyers de ces bases et les revenus portuaires constituent la colonne vertébrale de l'économie.</p>
+      <ul class="timeline">
+        <li><span class="tl-year">1991–1994</span><span class="tl-event">Guerre civile entre le gouvernement (Issas) et le FRUD (Afars).</span></li>
+        <li><span class="tl-year">1999</span><span class="tl-event">Ismaïl Omar Guelleh succède à son oncle. Réélu en 2005, 2011 et 2021.</span></li>
+        <li><span class="tl-year">2002</span><span class="tl-event">Les États-Unis établissent Camp Lemonnier, seule base permanente américaine en Afrique.</span></li>
+        <li><span class="tl-year">2017</span><span class="tl-event">Inauguration de la base navale chinoise, première base militaire chinoise à l'étranger.</span></li>
+      </ul>
+      <div class="pullquote">
+        « Djibouti est devenu le porte-avions terrestre du monde. Sa souveraineté réelle est limitée par sa dépendance envers ses locataires militaires. »
+        <cite>— Sonia Le Gouriellec, <em>Djibouti, la diplomatie du petit État</em>, 2019</cite>
+      </div>
+      <div class="sources-block">
+        <h3>Sources — État post-colonial</h3>
+        <ul>
+          <li>Sonia Le Gouriellec, <em>Djibouti, la diplomatie du petit État</em>, L'Harmattan, 2019</li>
+          <li>World Bank Data — Djibouti</li>
+          <li>International Crisis Group — "Djibouti: Keeping the Peace in the Horn of Africa", 2020</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">
+      <div class="section-number">03</div>
+      <div class="section-title">Rôle de la colonisation</div>
+    </div>
+    <div class="section-body">
+      <h2>Géopolitique héritée :<br><em>la colonisation perpétuée</em></h2>
+      <p>La colonisation française a fondamentalement façonné Djibouti comme un <strong>État-transit</strong> plutôt que productif. L'économie coloniale était entièrement tournée vers le service portuaire sans investissement dans l'agriculture, l'industrie ou la formation locale. Ce pays importe aujourd'hui plus de 90% de sa nourriture.</p>
+      <div class="tag">État-transit</div>
+      <div class="tag">Dépendance alimentaire</div>
+      <div class="tag">Fracture Afar-Issa</div>
+      <div class="tag">Base militaire étrangère</div>
+      <p style="margin-top:18px">La présence militaire française permanente après l'indépendance illustre une forme de <strong>néo-colonialisme consenti</strong>. La dette envers la Chine représente plus de 70% du PIB selon le FMI (2022), soulevant des inquiétudes sur une nouvelle forme de dépendance.</p>
+      <div class="sources-block">
+        <h3>Sources — Héritage colonial</h3>
+        <ul>
+          <li>Sonia Le Gouriellec, "La Corne de l'Afrique et les puissances extérieures", Politique africaine, 2018</li>
+          <li>FMI — Rapport sur la dette extérieure de Djibouti, 2022</li>
+          <li>Gérard Prunier, <em>The Horn of Africa: State Formation and Decay</em>, Hurst, 2021</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════ GUINÉE ═══════════════════════════════ -->
+<div id="tab-guinee" class="tab-panel guinee">
+  <div class="country-hero">
+    <div>
+      <h2 class="country-name"><span>République de</span>Guinée</h2>
+    </div>
+    <div class="country-badge">
+      <div class="stat-pill">Indépendance : 2 oct. 1958</div>
+      <div class="stat-pill">Colonisateur : France</div>
+      <div class="stat-pill">Superficie : 245 857 km²</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">
+      <div class="section-number">01</div>
+      <div class="section-title">Histoire de la colonisation</div>
+    </div>
+    <div class="section-body">
+      <h2>La résistance de <em>Samory Touré</em><br>et la colonisation française</h2>
+      <p>La France pénètre la région dans les années <strong>1880</strong>. Elle se heurte à une résistance armée de près de <strong>18 ans</strong> (1881–1898) sous la conduite de <strong>Samory Touré</strong>, chef de l'empire mandingue du Wassoulou. Capturé en 1898, il est exilé au Gabon où il meurt en 1900. Sa résistance reste l'une des plus longues de l'histoire coloniale africaine.</p>
+      <div class="pullquote">
+        « Samory fut le Napoléon africain. Il bâtit un État, forma une armée, et tint en échec l'empire colonial français pendant deux décennies. »
+        <cite>— Yves Person, <em>Samory, une révolution dyula</em>, IFAN, 1968</cite>
+      </div>
+      <ul class="timeline">
+        <li><span class="tl-year">1881</span><span class="tl-event">Début des affrontements entre l'armée de Samory Touré et les troupes françaises.</span></li>
+        <li><span class="tl-year">1891</span><span class="tl-event">La Guinée est formellement proclamée colonie française.</span></li>
+        <li><span class="tl-year">1898</span><span class="tl-event">Capture et exil de Samory Touré. Fin de la résistance armée organisée.</span></li>
+        <li><span class="tl-year">1900–1958</span><span class="tl-event">Exploitation intensive des ressources. Travaux forcés, impôts de capitation, destruction des structures politiques locales.</span></li>
+        <li><span class="tl-year">1958</span><span class="tl-event">Référendum : Sékou Touré est le seul leader africain à faire voter "Non" à de Gaulle.</span></li>
+      </ul>
+      <div class="sources-block">
+        <h3>Sources — Colonisation</h3>
+        <ul>
+          <li>Yves Person, <em>Samory, une révolution dyula</em> (3 vol.), IFAN-Dakar, 1968–1975</li>
+          <li>Jean Suret-Canale, <em>Afrique Noire occidentale et centrale : l'ère coloniale</em>, Éditions Sociales, 1964</li>
+          <li>Frederick Cooper, <em>Africa since 1940</em>, Cambridge University Press, 2002</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">
+      <div class="section-number">02</div>
+      <div class="section-title">État après la colonisation</div>
+    </div>
+    <div class="section-body">
+      <h2>Du "Non" historique<br><em>à la dictature</em></h2>
+      <div class="data-grid">
+        <div class="data-card"><div class="val">14M</div><div class="lbl">Habitants (2024)</div></div>
+        <div class="data-card"><div class="val">870$</div><div class="lbl">PIB/hab. (World Bank 2023)</div></div>
+        <div class="data-card"><div class="val">40%</div><div class="lbl">Réserves mondiales bauxite</div></div>
+        <div class="data-card"><div class="val">#178</div><div class="lbl">IDH mondial (PNUD 2023)</div></div>
+      </div>
+      <p>Le "Non" de 1958 est un acte fondateur de la décolonisation africaine. En réponse, la France procède à une <strong>rupture brutale</strong> : retrait de tous ses fonctionnaires et techniciens, destruction des archives et des plans d'infrastructures. Sékou Touré instaure progressivement un régime de <strong>parti unique et de terreur</strong> — le Camp Boiro — avec 50 000 à 100 000 victimes estimées entre 1958 et 1984.</p>
+      <ul class="timeline">
+        <li><span class="tl-year">1958</span><span class="tl-event">Indépendance immédiate. La France punit le "Non" en retirant son aide et ses cadres.</span></li>
+        <li><span class="tl-year">1960–1984</span><span class="tl-event">Dictature de Sékou Touré. Camp Boiro, répression, isolement international.</span></li>
+        <li><span class="tl-year">1984</span><span class="tl-event">Mort de Sékou Touré. Coup d'état du général Lansana Conté.</span></li>
+        <li><span class="tl-year">2008</span><span class="tl-event">Mort de Conté. Coup d'état de Moussa Dadis Camara. Massacre du 28 sept. 2009 : 157 civils tués dans un stade.</span></li>
+        <li><span class="tl-year">2021</span><span class="tl-event">Coup d'état du colonel Mamadi Doumbouya. La junte (CNRD) suspend la Constitution.</span></li>
+      </ul>
+      <div class="pullquote">
+        « La Guinée est un scandale géologique. Elle devrait être l'un des pays les plus riches d'Afrique. Elle est l'un des plus pauvres. »
+        <cite>— Tierno Monénembo, <em>Le Roi de Kahel</em>, Seuil, 2008</cite>
+      </div>
+      <div class="sources-block">
+        <h3>Sources — État post-colonial</h3>
+        <ul>
+          <li>Tierno Monénembo, <em>Le Roi de Kahel</em>, Seuil, 2008</li>
+          <li>World Bank Data — Guinea</li>
+          <li>Human Rights Watch — "Bloody Monday: The September 28 Massacre", 2009</li>
+          <li>PNUD — Rapport IDH 2023, Guinée</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">
+      <div class="section-number">03</div>
+      <div class="section-title">Rôle de la colonisation</div>
+    </div>
+    <div class="section-body">
+      <h2>La punition coloniale<br><em>comme matrice de la pauvreté</em></h2>
+      <p>La responsabilité coloniale est double. La colonisation française n'a développé qu'une économie extractive sans industrie locale. Le sabotage français de 1958 — une "<strong>décolonisation punitive</strong>" — a privé le jeune État de toute capacité administrative, poussant Sékou Touré vers l'isolationnisme et l'autoritarisme.</p>
+      <div class="tag">Économie extractive</div>
+      <div class="tag">Décolonisation punitive</div>
+      <div class="tag">Sabotage administratif</div>
+      <div class="tag">Malédiction des ressources</div>
+      <p style="margin-top:18px">Les multinationales (Rio Tinto, Guinea Alumina Corporation) extraient la bauxite brute sans transformation locale. La Guinée reçoit une fraction de la valeur de ses ressources — une continuité directe de la structure économique coloniale.</p>
+      <div class="pullquote">
+        « La décolonisation de la Guinée fut sabotée dès sa naissance. La France a préféré détruire plutôt que transmettre. »
+        <cite>— Elizabeth Schmidt, <em>Cold War and Decolonization in Guinea</em>, Ohio University Press, 2007</cite>
+      </div>
+      <div class="sources-block">
+        <h3>Sources — Héritage colonial</h3>
+        <ul>
+          <li>Elizabeth Schmidt, <em>Cold War and Decolonization in Guinea, 1946–1958</em>, Ohio University Press, 2007</li>
+          <li>Jean Suret-Canale, <em>La République de Guinée</em>, Éditions Sociales, 1970</li>
+          <li>Global Witness — "Guinea: The Mining Sector and Human Rights", 2019</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════ LIBÉRIA ═══════════════════════════════ -->
+<div id="tab-liberia" class="tab-panel liberia">
+  <div class="country-hero">
+    <div>
+      <h2 class="country-name"><span>République du</span>Libéria</h2>
+    </div>
+    <div class="country-badge">
+      <div class="stat-pill">Indépendance : 26 juil. 1847</div>
+      <div class="stat-pill">Fondé par : ACS (États-Unis)</div>
+      <div class="stat-pill">Superficie : 111 369 km²</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">
+      <div class="section-number">01</div>
+      <div class="section-title">Histoire de la colonisation</div>
+    </div>
+    <div class="section-body">
+      <h2>Une colonie de<br><em>colons afro-américains</em></h2>
+      <p>Le Libéria présente un cas unique : fondé par l'<strong>American Colonization Society (ACS)</strong> à partir de 1822, il accueille des esclaves affranchis américains. Les Américano-Libériens (~5% de la population) s'installent sur un territoire peuplé de <strong>16 peuples autochtones</strong> et reproduisent envers eux les structures coloniales dont ils étaient eux-mêmes victimes : ségrégation, exclusion politique, travail forcé, terres confisquées.</p>
+      <div class="pullquote">
+        « Le Libéria fut fondé comme refuge de liberté, et devint une cage pour ses habitants originels. »
+        <cite>— Ibrahim Sundiata, <em>Brothers and Strangers</em>, Duke University Press, 2003</cite>
+      </div>
+      <ul class="timeline">
+        <li><span class="tl-year">1816</span><span class="tl-event">Création de l'American Colonization Society, qui prône le retour des Noirs américains en Afrique.</span></li>
+        <li><span class="tl-year">1822</span><span class="tl-event">Premiers colons à Cape Mesurado. Fondation de Monrovia.</span></li>
+        <li><span class="tl-year">1847</span><span class="tl-event">Indépendance. Premier État africain républicain indépendant moderne.</span></li>
+        <li><span class="tl-year">1847–1980</span><span class="tl-event">Le True Whig Party gouverne sans interruption. Peuples autochtones exclus de la pleine citoyenneté jusqu'en 1904.</span></li>
+        <li><span class="tl-year">1926</span><span class="tl-event">Concession Firestone : 1 million d'acres loués pour 99 ans. Travail quasi-servile documenté.</span></li>
+        <li><span class="tl-year">1930</span><span class="tl-event">La Société des Nations enquête sur le travail forcé d'autochtones libériens.</span></li>
+      </ul>
+      <div class="sources-block">
+        <h3>Sources — Colonisation</h3>
+        <ul>
+          <li>Ibrahim Sundiata, <em>Brothers and Strangers: Black Zion, Black Slavery, 1914–1940</em>, Duke University Press, 2003</li>
+          <li>Société des Nations — Rapport d'enquête sur le travail forcé au Libéria, 1930</li>
+          <li>Walter Rodney, <em>How Europe Underdeveloped Africa</em>, 1972</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">
+      <div class="section-number">02</div>
+      <div class="section-title">État après la colonisation</div>
+    </div>
+    <div class="section-body">
+      <h2>Deux guerres civiles,<br><em>un pays dévasté</em></h2>
+      <div class="data-grid">
+        <div class="data-card"><div class="val">5,5M</div><div class="lbl">Habitants (2024)</div></div>
+        <div class="data-card"><div class="val">685$</div><div class="lbl">PIB/hab. (World Bank 2023)</div></div>
+        <div class="data-card"><div class="val">250k</div><div class="lbl">Morts guerres civiles</div></div>
+        <div class="data-card"><div class="val">#175</div><div class="lbl">IDH mondial (PNUD 2023)</div></div>
+      </div>
+      <p>En 1980, le <strong>sergent Samuel Doe</strong> renverse le président Tolbert — revanche des peuples autochtones contre l'élite américano-libérienne. En 1989, <strong>Charles Taylor</strong> lance une rébellion. Les deux guerres civiles (1989–1996 et 1999–2003) font ~250 000 morts, déplacent la moitié de la population et détruisent quasi toutes les infrastructures. L'utilisation massive d'<strong>enfants soldats</strong> fait du Libéria un symbole de l'effondrement étatique.</p>
+      <ul class="timeline">
+        <li><span class="tl-year">1980</span><span class="tl-event">Coup d'état de Samuel Doe. Assassinat du président Tolbert. Fin de 133 ans de domination américano-libérienne.</span></li>
+        <li><span class="tl-year">1989–1996</span><span class="tl-event">Première Guerre civile. ~150 000 morts.</span></li>
+        <li><span class="tl-year">1999–2003</span><span class="tl-event">Deuxième Guerre civile. ~100 000 morts supplémentaires.</span></li>
+        <li><span class="tl-year">2005</span><span class="tl-event">Ellen Johnson Sirleaf élue — première femme présidente d'Afrique. Prix Nobel de la Paix 2011.</span></li>
+        <li><span class="tl-year">2017</span><span class="tl-event">George Weah élu. Première transition pacifique entre partis d'opposition depuis 1944.</span></li>
+      </ul>
+      <div class="pullquote">
+        « Le Libéria est un pays fondé sur une promesse de liberté qui s'est transformée en système d'oppression intérieure. »
+        <cite>— Ellen Johnson Sirleaf, <em>This Child Will Be Great</em>, Harper, 2009</cite>
+      </div>
+      <div class="sources-block">
+        <h3>Sources — État post-colonial</h3>
+        <ul>
+          <li>Ellen Johnson Sirleaf, <em>This Child Will Be Great</em>, Harper Collins, 2009</li>
+          <li>World Bank Data — Liberia</li>
+          <li>Human Rights Watch — "Youth, Poverty and Blood", 2005</li>
+          <li>Tribunal Spécial pour la Sierra Leone — Jugement Charles Taylor, 2012</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">
+      <div class="section-number">03</div>
+      <div class="section-title">Rôle de la colonisation</div>
+    </div>
+    <div class="section-body">
+      <h2>La colonisation intérieure :<br><em>un péché fondateur original</em></h2>
+      <p>Le Libéria permet d'isoler la <strong>variable coloniale de la variable raciale</strong>. Des descendants d'Africains esclavisés ont reproduit les structures de domination coloniale envers les autochtones. Cela confirme que le colonialisme est une <strong>structure de pouvoir économique</strong>, indépendante de la race des dominants.</p>
+      <div class="tag">Colonisation intérieure</div>
+      <div class="tag">Exclusion autochtone</div>
+      <div class="tag">Capitalisme de rente</div>
+      <div class="tag">Vide institutionnel</div>
+      <p style="margin-top:18px">La concession Firestone illustre comment des élites locales faibles vendent les ressources à des capitaux étrangers. Les guerres civiles s'enracinent dans les <strong>inégalités ethniques héritées</strong> de la période de domination américano-libérienne : l'exclusion systémique des peuples Krahn, Gio, Mano a rendu le système politique libérien intrinsèquement fragile.</p>
+      <div class="sources-block">
+        <h3>Sources — Héritage colonial</h3>
+        <ul>
+          <li>Ibrahim Sundiata, <em>Brothers and Strangers</em>, Duke University Press, 2003</li>
+          <li>Amos Sawyer, <em>The Emergence of Autocracy in Liberia</em>, ICS Press, 1992</li>
+          <li>Global Witness — "Logging Off: How the Liberian Government has Failed to Implement Forest Sector Reforms", 2012</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════ BÉNIN ═══════════════════════════════ -->
+<div id="tab-benin" class="tab-panel benin">
+  <div class="country-hero">
+    <div>
+      <h2 class="country-name"><span>République du</span>Bénin</h2>
+    </div>
+    <div class="country-badge">
+      <div class="stat-pill">Indépendance : 1er août 1960</div>
+      <div class="stat-pill">Colonisateur : France (Dahomey)</div>
+      <div class="stat-pill">Superficie : 114 763 km²</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">
+      <div class="section-number">01</div>
+      <div class="section-title">Histoire de la colonisation</div>
+    </div>
+    <div class="section-body">
+      <h2>Le Dahomey :<br><em>royaume, traite et conquête</em></h2>
+      <p>Le territoire du Bénin abritait le puissant <strong>Royaume de Dahomey</strong>, fondé au XVIIe siècle. Ce royaume fut aussi l'un des principaux acteurs de la <strong>traite des esclaves</strong> : il vendait des prisonniers de guerre aux négriers européens à Ouidah, principal port négrier de l'Afrique de l'Ouest. La France colonise le territoire entre <strong>1892 et 1894</strong>, écrasant la résistance des célèbres <em>Agojie</em> (les "Amazones du Dahomey"). Le roi Béhanzin est capturé et exilé en Martinique.</p>
+      <div class="pullquote">
+        « Le Dahomey était à la fois victime et acteur de la traite. Cette ambivalence est au cœur de l'histoire béninoise, et difficile à assumer. »
+        <cite>— Élise Soumonni, historien béninois, Université d'Abomey-Calavi</cite>
+      </div>
+      <ul class="timeline">
+        <li><span class="tl-year">XVIIe s.</span><span class="tl-event">Fondation du Royaume de Dahomey. Puissance régionale organisée autour de la guerre et de la traite.</span></li>
+        <li><span class="tl-year">1700–1850</span><span class="tl-event">Ouidah, port d'embarquement de centaines de milliers d'esclaves vers les Amériques, notamment le Brésil.</span></li>
+        <li><span class="tl-year">1890–1892</span><span class="tl-event">Deux guerres franco-dahoméennes. Les Agojie résistent aux troupes coloniales françaises.</span></li>
+        <li><span class="tl-year">1894</span><span class="tl-event">Capture et exil du roi Béhanzin. Le Dahomey devient colonie française.</span></li>
+        <li><span class="tl-year">1900–1958</span><span class="tl-event">Intégration à l'AOF. Investissement français dans l'éducation : le Dahomey devient le "Quartier Latin de l'Afrique".</span></li>
+        <li><span class="tl-year">1960</span><span class="tl-event">Indépendance le 1er août. Hubert Maga premier président.</span></li>
+      </ul>
+      <div class="sources-block">
+        <h3>Sources — Colonisation</h3>
+        <ul>
+          <li>Robin Law, <em>Ouidah: The Social History of a West African Slaving Port</em>, Ohio University Press, 2004</li>
+          <li>Élise Soumonni, "Dahomey and the Transatlantic Slave Trade", Slavery & Abolition, 2001</li>
+          <li>Encyclopædia Britannica — "Benin: History"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">
+      <div class="section-number">02</div>
+      <div class="section-title">État après la colonisation</div>
+    </div>
+    <div class="section-body">
+      <h2>Du "Quartier Latin" au<br><em>modèle démocratique africain</em></h2>
+      <div class="data-grid">
+        <div class="data-card"><div class="val">13M</div><div class="lbl">Habitants (2024)</div></div>
+        <div class="data-card"><div class="val">1 280$</div><div class="lbl">PIB/hab. (World Bank 2023)</div></div>
+        <div class="data-card"><div class="val">6</div><div class="lbl">Coups d'état (1960–1972)</div></div>
+        <div class="data-card"><div class="val">#166</div><div class="lbl">IDH mondial (PNUD 2023)</div></div>
+      </div>
+      <p>Entre 1960 et 1972, le Bénin connaît <strong>6 coups d'état</strong>. En 1972, le général <strong>Kérékou</strong> instaure un régime marxiste-léniniste. Mais en 1990, face à la faillite économique, il organise la <em>Conférence nationale souveraine</em> — transition démocratique pacifique saluée comme un modèle africain. En 1991, il perd les élections et les accepte — l'un des rares cas de ce type en Afrique.</p>
+      <ul class="timeline">
+        <li><span class="tl-year">1960–1972</span><span class="tl-event">Instabilité chronique : 6 coups d'état en 12 ans.</span></li>
+        <li><span class="tl-year">1972</span><span class="tl-event">Coup d'état de Kérékou. Instauration du marxisme-léninisme.</span></li>
+        <li><span class="tl-year">1975</span><span class="tl-event">Rebaptisation en "Bénin".</span></li>
+        <li><span class="tl-year">1990</span><span class="tl-event">Conférence nationale souveraine. Transition démocratique pacifique. Modèle pour l'Afrique.</span></li>
+        <li><span class="tl-year">1991</span><span class="tl-event">Kérékou perd les élections face à Nicéphore Soglo et l'accepte.</span></li>
+        <li><span class="tl-year">2016–auj.</span><span class="tl-event">Patrice Talon président. Réformes économiques mais durcissement politique et limitation de l'opposition.</span></li>
+      </ul>
+      <div class="pullquote">
+        « La Conférence nationale de 1990 fut une révolution tranquille. Le Bénin a montré que la démocratie était possible en Afrique, sans violence. »
+        <cite>— John Clark & David Gardinier, <em>Political Reform in Francophone Africa</em>, Westview Press, 1997</cite>
+      </div>
+      <div class="sources-block">
+        <h3>Sources — État post-colonial</h3>
+        <ul>
+          <li>John Clark & David Gardinier (éds.), <em>Political Reform in Francophone Africa</em>, Westview Press, 1997</li>
+          <li>World Bank Data — Benin</li>
+          <li>Freedom House — Rapports annuels Bénin</li>
+          <li>Human Rights Watch — "Benin: Crackdown on Opposition", 2019</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">
+      <div class="section-number">03</div>
+      <div class="section-title">Rôle de la colonisation</div>
+    </div>
+    <div class="section-body">
+      <h2>Traite, colonisation<br><em>et mémoire complexe</em></h2>
+      <p>Le Bénin est face à une <strong>double responsabilité historique</strong>. La colonisation française a brisé le Royaume de Dahomey et exploité ses populations. Mais ce même royaume avait participé activement à la traite. Le président Talon a reconnu en 2018 la responsabilité des ancêtres dahoméens : une prise de position rare en Afrique qui a lancé un débat continental sur la <strong>mémoire partagée</strong> de l'esclavage.</p>
+      <div class="tag">Double mémoire</div>
+      <div class="tag">Traite et colonisation</div>
+      <div class="tag">Inégalités régionales</div>
+      <div class="tag">Restitution culturelle</div>
+      <p style="margin-top:18px">La France a accepté en 2021 de restituer 26 œuvres pillées lors de la conquête de 1894 (les trésors royaux d'Abomey conservés au Musée du quai Branly). Une décision historique, mais portant sur une infime partie du patrimoine spolié.</p>
+      <div class="pullquote">
+        « Rendre les trésors d'Abomey, c'est reconnaître que la conquête fut un crime autant qu'un fait historique. »
+        <cite>— Felwine Sarr & Bénédicte Savoy, <em>Restituer le patrimoine africain</em>, Seuil/Philippe Rey, 2018</cite>
+      </div>
+      <div class="sources-block">
+        <h3>Sources — Héritage colonial</h3>
+        <ul>
+          <li>Felwine Sarr & Bénédicte Savoy, <em>Restituer le patrimoine africain</em>, Seuil/Philippe Rey, 2018</li>
+          <li>Élise Soumonni, "Dahomey and the Transatlantic Slave Trade", Slavery & Abolition, 2001</li>
+          <li>Le Monde — "Le Bénin récupère 26 œuvres d'art pillées par la France", 2021</li>
+          <li>Robin Law, <em>Ouidah</em>, Ohio University Press, 2004</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════ ÉRYTHRÉE ═══════════════════════════════ -->
+<div id="tab-erythree" class="tab-panel erythree">
+  <div class="country-hero">
+    <div>
+      <h2 class="country-name"><span>État d'</span>Érythrée</h2>
+    </div>
+    <div class="country-badge">
+      <div class="stat-pill">Indépendance : 24 mai 1993</div>
+      <div class="stat-pill">Colonisateurs : Italie, GB, Éthiopie</div>
+      <div class="stat-pill">Superficie : 117 600 km²</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">
+      <div class="section-number">01</div>
+      <div class="section-title">Histoire de la colonisation</div>
+    </div>
+    <div class="section-body">
+      <h2>Trois colonisations<br><em>successives</em></h2>
+      <p>L'Érythrée a le destin colonial le plus complexe du continent : trois puissances successives sur un siècle. L'<strong>Italie</strong> s'empare du territoire en 1889 et en fait sa première colonie africaine, baptisée "Eritrea" du nom latin de la mer Rouge. Elle développe Asmara en ville moderne et tente d'en faire une colonie de peuplement. En 1935, l'Érythrée sert de base pour l'invasion de l'Éthiopie par Mussolini. Vaincue en 1941 par les <strong>Britanniques</strong>, l'Italie perd ses colonies africaines.</p>
+      <div class="pullquote">
+        « Asmara est un musée à ciel ouvert de l'architecture coloniale italienne — futuriste, art déco, rationaliste. Un héritage beau et ambigu. »
+        <cite>— Edward Denison, <em>Asmara: Africa's Secret Modernist City</em>, Merrell, 2003</cite>
+      </div>
+      <ul class="timeline">
+        <li><span class="tl-year">1889</span><span class="tl-event">Traité d'Ucciali : l'Italie établit un protectorat. Première colonie italienne en Afrique.</span></li>
+        <li><span class="tl-year">1935</span><span class="tl-event">L'Érythrée sert de base pour l'invasion italienne de l'Éthiopie.</span></li>
+        <li><span class="tl-year">1941</span><span class="tl-event">Défaite italienne. L'Érythrée passe sous administration militaire britannique.</span></li>
+        <li><span class="tl-year">1952</span><span class="tl-event">L'ONU fédère l'Érythrée à l'Éthiopie, malgré les aspirations indépendantistes.</span></li>
+        <li><span class="tl-year">1962</span><span class="tl-event">Haïlé Sélassié annexe unilatéralement l'Érythrée. Début de la guerre d'indépendance.</span></li>
+        <li><span class="tl-year">1962–1991</span><span class="tl-event">30 ans de guerre contre l'Éthiopie. L'EPLF finalement victorieux.</span></li>
+        <li><span class="tl-year">1993</span><span class="tl-event">Référendum : 99,8% pour l'indépendance. Reconnaissance internationale le 24 mai 1993.</span></li>
+      </ul>
+      <div class="sources-block">
+        <h3>Sources — Colonisation</h3>
+        <ul>
+          <li>Edward Denison, <em>Asmara: Africa's Secret Modernist City</em>, Merrell, 2003</li>
+          <li>Tekeste Negash, <em>Italian Colonialism in Eritrea, 1882–1941</em>, Uppsala University Press, 1987</li>
+          <li>Ruth Iyob, <em>The Eritrean Struggle for Independence</em>, Cambridge University Press, 1995</li>
+          <li>UNESCO — Asmara, patrimoine mondial de l'humanité, 2017</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">
+      <div class="section-number">02</div>
+      <div class="section-title">État après la colonisation</div>
+    </div>
+    <div class="section-body">
+      <h2>L'indépendance confisquée :<br><em>la "Corée du Nord africaine"</em></h2>
+      <div class="data-grid">
+        <div class="data-card"><div class="val">3,7M</div><div class="lbl">Habitants (estimation 2024)</div></div>
+        <div class="data-card"><div class="val">~650$</div><div class="lbl">PIB/hab. (estimé)</div></div>
+        <div class="data-card"><div class="val">600k+</div><div class="lbl">Réfugiés et migrants (UNHCR)</div></div>
+        <div class="data-card"><div class="val">#180</div><div class="lbl">IDH mondial (PNUD 2023)</div></div>
+      </div>
+      <p>L'indépendance de 1993, acquise au prix de ~150 000 morts, suscite un immense espoir. Mais <strong>Issaias Afwerki</strong> confisque le pouvoir : sans élections, sans constitution (suspendue en 2001), sans presse libre. Le <em>service national illimité</em> constitue de facto un travail forcé d'État. Des centaines de milliers d'Érythréens ont fui — l'un des plus grands flux migratoires d'Afrique proportionnellement à la population.</p>
+      <ul class="timeline">
+        <li><span class="tl-year">1993</span><span class="tl-event">Indépendance. Issaias Afwerki devient président. Espoirs démocratiques immenses.</span></li>
+        <li><span class="tl-year">1998–2000</span><span class="tl-event">Guerre frontalière avec l'Éthiopie. ~80 000 morts pour un conflit territorial.</span></li>
+        <li><span class="tl-year">2001</span><span class="tl-event">Suspension de la Constitution. Arrestation des dissidents du "G-15". Fermeture de la presse indépendante.</span></li>
+        <li><span class="tl-year">2018</span><span class="tl-event">Accord de paix avec l'Éthiopie. Aucune libéralisation interne.</span></li>
+        <li><span class="tl-year">2020–2022</span><span class="tl-event">L'armée érythréenne intervient dans la guerre du Tigré, commettant des atrocités documentées par l'ONU.</span></li>
+      </ul>
+      <div class="pullquote">
+        « L'Érythrée est l'un des États les plus fermés du monde. Ses citoyens fuient en nombre un pays qui a pourtant lutté 30 ans pour son indépendance. »
+        <cite>— Human Rights Watch, Rapport annuel Érythrée, 2023</cite>
+      </div>
+      <div class="sources-block">
+        <h3>Sources — État post-colonial</h3>
+        <ul>
+          <li>Human Rights Watch — Rapports annuels Érythrée</li>
+          <li>UNHCR — Données réfugiés érythréens</li>
+          <li>Rapport ONU — Commission d'enquête sur les droits de l'homme en Érythrée, 2016</li>
+          <li>PNUD — Rapport IDH 2023, Érythrée</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">
+      <div class="section-number">03</div>
+      <div class="section-title">Rôle de la colonisation</div>
+    </div>
+    <div class="section-body">
+      <h2>Trente ans de lutte,<br><em>une indépendance dévorée de l'intérieur</em></h2>
+      <p>Trois décennies de guerre ont forgé une idéologie de <em>l'assiégé permanent</em> qui justifie toutes les restrictions au nom de la survie nationale. La décision de l'ONU de fédérer l'Érythrée à l'Éthiopie en 1952, ignorant les aspirations indépendantistes, est directement responsable des 30 années de guerre suivantes — une <strong>faute de la communauté internationale</strong> héritière de la décolonisation.</p>
+      <div class="tag">Traumatisme de la guerre</div>
+      <div class="tag">Idéologie de l'assiégé</div>
+      <div class="tag">Service national forcé</div>
+      <div class="tag">Exode massif</div>
+      <p style="margin-top:18px">La colonisation italienne a laissé un héritage ambigu : les infrastructures d'Asmara (classée UNESCO 2017) constituent un acquis réel, mais le développement colonial n'a profité qu'aux colons italiens sans préparer l'Érythrée à l'autonomie économique.</p>
+      <div class="pullquote">
+        « L'Érythrée est un pays où l'indépendance a été gagnée sur le terrain mais perdue dans les institutions. Son régime est la continuation de la guerre par d'autres moyens. »
+        <cite>— Kjetil Tronvoll & Daniel Mekonnen, <em>The African Garrison State</em>, Currey, 2014</cite>
+      </div>
+      <div class="footnote">Note : En 2016, la Commission d'enquête de l'ONU a conclu que des <em>crimes contre l'humanité</em> étaient commis par le gouvernement érythréen — incluant esclavage, emprisonnement, torture et persécution à grande échelle.</div>
+      <div class="sources-block">
+        <h3>Sources — Héritage colonial</h3>
+        <ul>
+          <li>Kjetil Tronvoll & Daniel Mekonnen, <em>The African Garrison State</em>, Currey, 2014</li>
+          <li>Commission ONU — "Report of the Commission of Inquiry on Human Rights in Eritrea", 2016</li>
+          <li>Tekeste Negash, <em>Eritrea and Ethiopia: The Federal Experience</em>, Transaction Publishers, 1997</li>
+          <li>Ruth Iyob, <em>The Eritrean Struggle for Independence</em>, Cambridge University Press, 1995</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <script>
   function switchTab(tab) {
@@ -773,6 +1323,25 @@
     document.getElementById(`tab-${tab}`).classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  function toggleTheme() {
+    const root = document.documentElement;
+    const isLight = root.classList.toggle('light');
+    document.getElementById('themeIcon').textContent = isLight ? '🌙' : '☀️';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  }
+
+  // Restore saved preference
+  (function() {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'light') {
+      document.documentElement.classList.add('light');
+      document.addEventListener('DOMContentLoaded', () => {
+        const icon = document.getElementById('themeIcon');
+        if (icon) icon.textContent = '🌙';
+      });
+    }
+  })();
 </script>
 </body>
 </html>
